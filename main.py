@@ -21,7 +21,7 @@ template_id = os.environ["TEMPLATE_ID"]
 def get_weather():
   url = "https://v0.yiketianqi.com/api?unescape=1&version=v61&appid=97897565&appsecret=zUECL8HV&ext=&cityid=&city=厦门"
   res = requests.get(url).json()
-  return res['wea'], math.floor(int(res['tem']))
+  return res['wea'], math.floor(int(res['tem1'])), math.floor(int(res['tem2'])), math.floor(int(res['humidity']))
 
 def get_count():
   delta = today - datetime.strptime(start_date, "%Y-%m-%d")
@@ -46,7 +46,7 @@ def get_random_color():
 client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
-wea, temperature = get_weather()
-data = {"weather":{"value":wea},"temperature":{"value":temperature},"love_days":{"value":get_count()},"birthday_left":{"value":get_birthday()}, "color":get_random_color()}
+wea, temperature,temperature1,humidity = get_weather()
+data = {"weather":{"value":wea},"humidity":{"value":humidity},"temperature":{"value":temperature},"temperature1":{"value":temperature1},"love_days":{"value":get_count()},"birthday_left":{"value":get_birthday()}, "color":get_random_color()}
 res = wm.send_template(user_id, template_id, data)
 print(res)
